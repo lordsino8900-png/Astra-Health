@@ -1,10 +1,17 @@
+import os
 import sqlite3
 import pandas as pd
 from datetime import datetime
 
-DB_NAME = "astra_health.db"
+DB_NAME = os.environ.get("ASTRA_DB_PATH", "astra_health.db")
+
+def _ensure_db_dir():
+    db_dir = os.path.dirname(DB_NAME)
+    if db_dir:
+        os.makedirs(db_dir, exist_ok=True)
 
 def init_db():
+    _ensure_db_dir()
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     
